@@ -3,41 +3,48 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Graph {
+public class GraphDS {
 
-	Set<Vertice> Vertices = new HashSet<>();
-	HashSet<Edge> edges = new HashSet<>();
 	HashMap<Vertice, ArrayList<Edge>> comp = new HashMap<>();
+	
+	public GraphDS(HashMap<Vertice, ArrayList<Edge>> comp) {
+		super();
+		this.comp = comp;
+	}
 	
 	public boolean addEdge(Vertice vFrom, Vertice vTo, int weight) {
 		
 		Edge edge = new Edge(vFrom, vTo, weight);
-		return edges.add(edge);
+		
+		ArrayList<Edge> existingEdges = comp.get(vFrom);
+		return existingEdges.add(edge);
 	}
 
-	public boolean addVertice(String name) {
-	        return Vertices.add(new Vertice(name));
+	public void addVertice(String name) {
+			comp.put(new Vertice(name), null);
 	}
 	
-	 public void removeVertice(Vertice Vertice) {
+	public void addVertice(String name, ArrayList<Edge> edges) {
+		comp.put(new Vertice(name), edges);
+	}
+	 
+	public void removeVertice(Vertice Vertice) {
 	        if (!this.comp.containsKey(Vertice)) {
-	            throw new IllegalArgumentException("This Vertice doesn't exist!");
+	            throw new IllegalArgumentException("This vertice doesn't exist!");
 	        }
 	        
-	        Vertices.remove(Vertice);
 	        this.comp.remove(Vertice);
-	        
 	    }
 	 
 	 public void removeEdge(Edge edge) {
-         if (!edges.remove(edge)) 
-        	 throw new IllegalArgumentException("This edge doesn't exist!");
          
          ArrayList<Edge> edgesvFrom = comp.get(edge.getvFrom());
          if (edgesvFrom.size() > 0) edgesvFrom.remove(edge);
-
+         else throw new IllegalArgumentException("This edge doesn't exist!");
+         
          ArrayList<Edge> edgesvTo = comp.get(edge.getvTo());
          if (edgesvTo.size() > 0) edgesvTo.remove(edge);
+         else throw new IllegalArgumentException("This edge doesn't exist!");
 
 	 }
 	
@@ -101,86 +108,6 @@ public class Graph {
 		 return comp.toString();
 	    }
 	 
-	 
-	 
-
-	private class Vertice {
-		String name;
-			
-		public Vertice(String name) {
-			super();
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		} 
-		
-	}
-	
-	
-	private class Edge {
-		
-		String lable;
-		Vertice vFrom, vTo;
-        int weight;
-		
-        public Edge(Vertice vFrom, Vertice vTo) {
-        	super();
-			this.vFrom = vFrom;
-			this.vTo = vTo;
-        }
-        
-        public Edge(Vertice vFrom, Vertice vTo, int weight) {
-			super();
-			this.vFrom = vFrom;
-			this.vTo = vTo;
-			this.weight = weight;
-		}
-        
-        public Edge(String lable, Vertice vFrom, Vertice vTo, int weight) {
-			super();
-			this.lable = lable;
-			this.vFrom = vFrom;
-			this.vTo = vTo;
-			this.weight = weight;
-		}
-
-		public Vertice getvFrom() {
-			return vFrom;
-		}
-
-		public void setN1(Vertice vFrom) {
-			this.vFrom = vFrom;
-		}
-
-		public Vertice getvTo() {
-			return vTo;
-		}
-
-		public void setN2(Vertice vTo) {
-			this.vTo = vTo;
-		}
-
-		public int getWeight() {
-			return weight;
-		}
-
-		public void setWeight(int weight) {
-			this.weight = weight;
-		}
-
-		public String getLable() {
-			return lable;
-		}
-
-		public void setLable(String lable) {
-			this.lable = lable;
-		}
 		
 	}
 	
@@ -199,4 +126,3 @@ public class Graph {
 	
 	
 	
-}
